@@ -5,10 +5,10 @@ import axios from "axios";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 
 const AppState = (props) => {  
-  const url = "http://localhost:3000/api";
+  // const url = "http://localhost:3000/api";
 
 
-  // const url = "https://shopglob.onrender.com/api";
+  const url = "https://shopglob.onrender.com/api";
 
   const [products, setProducts] = useState([]);
   const [token, setToken] = useState([]);
