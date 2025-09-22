@@ -1,3 +1,4 @@
+// Navbar.jsx
 import React, { useContext, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import AppContext from "../context/AppContext";
@@ -5,7 +6,7 @@ import AppContext from "../context/AppContext";
 const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-  const { setFilterData, products, logout, isAuthenticated, cart} =
+  const { setFilterData, products, logout, isAuthenticated, cart } =
     useContext(AppContext);
 
   const location = useLocation();
@@ -34,6 +35,7 @@ const Navbar = () => {
     navigate(`/product/search/${searchTerm}`);
     setSearchTerm("");
   };
+
   return (
     <>
       <div className="nav sticky-top">
@@ -45,7 +47,7 @@ const Navbar = () => {
           >
             <h3>ShopGlob</h3>
           </Link>
-          <form className="search_bar" onSubmit={submitHandler}>
+          <form className="search_bar my-2" onSubmit={submitHandler}>
             <span className="material-symbols-outlined">search</span>
             <input
               value={searchTerm}
@@ -54,23 +56,23 @@ const Navbar = () => {
               placeholder="Search Products..."
             />
           </form>
-          <div className="right">
+          <div className="right mt-2 mt-md-0">
             {isAuthenticated && (
               <>
-                <Link to={"/cart"}
+                <Link
+                  to={"/cart"}
                   type="button"
-                  className="btn btn-primary position-relative mx-3"
+                  className="btn btn-primary position-relative mx-2"
                 >
                   Cart
-                 {cart?.items?.length>0 && (
-                   <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    {cart?.items?.length}
-                    <span className="visually-hidden">unread messages</span>
-                  </span>
-                 )}
+                  {cart?.items?.length > 0 && (
+                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                      {cart?.items?.length}
+                    </span>
+                  )}
                 </Link>
 
-                <Link to={"/profile"} className="btn btn-primary mx-3">
+                <Link to={"/profile"} className="btn btn-primary mx-2">
                   Profile
                 </Link>
                 <button
@@ -78,7 +80,7 @@ const Navbar = () => {
                     logout();
                     navigate("/");
                   }}
-                  className="btn btn-danger mx-3"
+                  className="btn btn-danger mx-2"
                 >
                   Logout
                 </button>
@@ -86,10 +88,10 @@ const Navbar = () => {
             )}
             {!isAuthenticated && (
               <>
-                <Link to={"/login"} className="btn btn-secondary mx-3">
+                <Link to={"/login"} className="btn btn-secondary mx-2">
                   Login
                 </Link>
-                <Link to={"/register"} className="btn btn-info mx-3">
+                <Link to={"/register"} className="btn btn-info mx-2">
                   Register
                 </Link>
               </>
@@ -98,7 +100,7 @@ const Navbar = () => {
         </div>
 
         {location.pathname == "/" && (
-          <div className="sub_bar">
+          <div className="sub_bar flex-wrap">
             <div className="items" onClick={() => filterbyCategory(null)}>
               No Filter
             </div>
@@ -111,42 +113,21 @@ const Navbar = () => {
             <div className="items" onClick={() => filterbyCategory("camera")}>
               Camera
             </div>
-            <div
-              className="items"
-              onClick={() => filterbyCategory("headphones")}
-            >
+            <div className="items" onClick={() => filterbyCategory("headphones")}>
               Headphones
             </div>
-            <div
-              className="items"
-              onClick={() => filterbyCategory("tv")}
-            >
+            <div className="items" onClick={() => filterbyCategory("tv")}>
               TV & Monitors
             </div>
-            <div
-              className="items"
-              onClick={() => filterbyCategory("accessories")}
-            >
+            <div className="items" onClick={() => filterbyCategory("accessories")}>
               Accessories
             </div>
-            <div className="items" onClick={() => filterbyPrice(999)}>
-              999
-            </div>
-            <div className="items" onClick={() => filterbyPrice(10000)}>
-              10000
-            </div>
-            <div className="items" onClick={() => filterbyPrice(30000)}>
-              30000
-            </div>
-            <div className="items" onClick={() => filterbyPrice(50000)}>
-              50000
-            </div>
-            <div className="items" onClick={() => filterbyPrice(90000)}>
-              90000
-            </div>
-            <div className="items" onClick={() => filterbyPrice(500000)}>
-              500000
-            </div>
+            <div className="items" onClick={() => filterbyPrice(999)}>999</div>
+            <div className="items" onClick={() => filterbyPrice(10000)}>10000</div>
+            <div className="items" onClick={() => filterbyPrice(30000)}>30000</div>
+            <div className="items" onClick={() => filterbyPrice(50000)}>50000</div>
+            <div className="items" onClick={() => filterbyPrice(90000)}>90000</div>
+            <div className="items" onClick={() => filterbyPrice(500000)}>500000</div>
           </div>
         )}
       </div>

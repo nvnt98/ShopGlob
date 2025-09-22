@@ -1,0 +1,8 @@
+{
+  "title":"iphone 15",
+  "description":"iphone",
+  "price":"500000",
+  "category":"mobiles",
+  "qty":"10",
+  "imgSrc":""
+}

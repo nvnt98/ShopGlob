@@ -1,88 +1,94 @@
-import React, { useContext, useState } from "react";
+// src/components/user/Login.jsx
+import React, { useState, useContext } from "react";
 import AppContext from "../../context/AppContext";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const navigate = useNavigate()
+  const { login } = useContext(AppContext);
+  const navigate = useNavigate();
 
-  const {login} = useContext(AppContext)
-  const [formData, setformData] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
+
+  const { email, password } = formData;
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
-    setformData({ ...formData, [name]: value });
-
+    setFormData({ ...formData, [name]: value });
   };
 
-  const { email, password}= formData;
-
-  const submitHandler = async(e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    // alert("Your form has been submitted");
-    const result = await login(email, password);
-    // console.log(result);
-
-    if (result.success){
-      navigate("/")
+    const res = await login(email, password);
+    if (res.success) {
+      navigate("/");
     }
-     
-
   };
 
   return (
-    <>
-      <div
-        className="container my-5 p-4 "
-        style={{
-          width: "600px",
-          border: "2px solid yellow",
-          borderRadius: "10px",
-        }}
-      >
+    <div className="login-container">
+      <div className="login-card">
+        {/* LEFT SIDE */}
+        <div className="login-left">
+          <h2>👋 Welcome Back to ShopGlob</h2>
+          <p>Login to continue your shopping journey.</p>
+        </div>
 
+        {/* RIGHT SIDE - FORM */}
+        <div className="login-right">
+          <h2 className="mb-4 text-center">Login</h2>
+          <form onSubmit={submitHandler}>
+            {/* Email */}
+            <div className="mb-3">
+              <label className="form-label">Email address</label>
+              <input
+                name="email"
+                value={email}
+                onChange={onChangeHandler}
+                type="email"
+                className="form-control bg-secondary text-light"
+                placeholder="Enter Email"
+                required
+              />
+            </div>
 
-        <h1 className="text-center">User Login</h1>
-        <form onSubmit={submitHandler} className="my-3">
-          <div className="mb-3">
-            <label htmlFor="exampleInputEmail1" className="form-label">
-              Email
-            </label>
-            <input
-              name="email"
-              value={formData.email}
-              onChange={onChangeHandler}
-              type="email"
-              className="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-            />
+            {/* Password */}
+            <div className="mb-3">
+              <label className="form-label">Password</label>
+              <input
+                name="password"
+                value={password}
+                onChange={onChangeHandler}
+                type="password"
+                className="form-control bg-secondary text-light"
+                placeholder="Enter Password"
+                required
+              />
+            </div>
+
+            {/* Login Button */}
+            <div className="d-grid mt-4">
+              <button type="submit" className="btn btn-warning" style={{ fontWeight: "bold" }}>
+                Login
+              </button>
+            </div>
+          </form>
+
+          {/* Bottom link */}
+          <div className="text-center mt-3">
+            <small>
+              Don't have an account?{" "}
+              <span
+                onClick={() => navigate("/register")}
+                style={{ color: "skyblue", cursor: "pointer" }}
+              >
+                Register
+              </span>
+            </small>
           </div>
-          <div className="mb-3">
-            <label htmlFor="exampleInputPassword1" className="form-label">
-              Password
-            </label>
-            <input
-              name="password"
-              value={formData.password}
-              onChange={onChangeHandler}
-              type="password"
-              className="form-control"
-              id="exampleInputPassword1"
-            />
-          </div>
-          <div className="d-grid col-6 mx-auto my-3">
-            <button type="submit" className="btn btn-primary">
-              Login
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
-
-export default Login
+export default Login;

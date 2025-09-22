@@ -1,68 +1,301 @@
+/* ========== GLOBAL RESET ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  background-color: black;
+  background-color: #0b0b0b;
   color: white;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body::-webkit-scrollbar {
   display: none;
 }
 
+/* ========== NAVBAR ========== */
 .nav_bar {
   width: 100%;
   display: flex;
-  /* Changed to space-between for better alignment */
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px; /* Added some horizontal padding */
-  background-color: blueviolet;
+  flex-wrap: wrap;
+  padding: 12px 20px;
+  background: linear-gradient(to right, #3c1053, #ad5389);
 }
 
-
-.nav_bar .navbar-brand:hover {
-  color: #dddddd;
+.nav_bar h3 {
+  font-weight: bold;
+  color: #fff;
 }
 
+/* ========== SEARCH BAR ========== */
 .search_bar {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: black;
-  border-radius: 20px;
-  padding: 10px;
-  width: 30%;
+  background-color: #1a1a1a;
+  border-radius: 30px;
+  padding: 6px 12px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.search_bar span {
+  color: #aaa;
 }
 
 .search_bar input {
   border: none;
-  background-color: transparent; /* Changed to transparent */
-  color: white;
-  width: 90%;
+  background-color: transparent;
+  color: #fff;
+  width: 100%;
+  padding: 6px;
 }
 
 .search_bar input::placeholder {
-  color: white;
+  color: #aaa;
 }
 
 .search_bar input:focus {
   outline: none;
 }
 
+/* ========== SUB_BAR (FILTER BAR) ========== */
 .sub_bar {
-  width: 100%;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
   display: flex;
-  justify-content: space-evenly;
+  flex-wrap: wrap;
+  justify-content: space-around;
   align-items: center;
-  background-color: rgb(127, 40, 156);
+  background-color: rgba(127, 40, 156, 0.95);
+  padding: 8px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+  z-index: 100;
 }
 
 .sub_bar .items {
-  padding: 10px;
+  flex: 1 1 auto;
+  min-width: 100px;
+  padding: 10px 15px;
   font-weight: bold;
-  text-align: center; /* Ensures text is centered */
-  width: 100%;
+  text-align: center;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .sub_bar .items:hover {
   background-color: black;
-  cursor: pointer;
+}
+
+/* ========== PRODUCT CARDS ========== */
+.card {
+  background-color: #1a1a1a !important;
+  color: #fff;
+  margin: 10px;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.15);
+}
+
+.card img {
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* ========== BUTTONS ========== */
+.btn {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: all 0.25s;
+}
+
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* ========== PRODUCT DETAIL PAGE ========== */
+.detail-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.detail-container img {
+  max-width: 300px;
+  width: 90%;
+  border-radius: 12px;
+  border: 2px solid yellow;
+}
+
+/* ========== TABLES (Checkout & Cart Responsive) ========== */
+@media (max-width: 768px) {
+  table thead {
+    display: none;
+  }
+
+  table tbody tr {
+    display: block;
+    margin-bottom: 15px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  table tbody td {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  table tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+}
+
+/* ========== RESPONSIVE TYPOGRAPHY ========== */
+h1, h2, h3 {
+  font-size: clamp(1.2rem, 2vw, 2.2rem);
+}
+
+p {
+  font-size: clamp(0.9rem, 1vw, 1.1rem);
+}
+
+/* ========== FORMS (General Inputs) ========== */
+.card form input {
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 1rem;
+}
+
+.card form label {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.btn {
+  font-size: 1rem;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+/* ========== LOGIN / REGISTER Rectangular Split ========== */
+.login-container,
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.login-card,
+.register-card {
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+  width: 100%;
+  max-width: 950px;   /* wide rectangle */
+  min-height: 420px;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+/* LEFT SIDE (welcome panel) */
+.login-left,
+.register-left {
+  flex: 1;
+  background: linear-gradient(135deg, #3c1053, #ad5389);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.login-left h2,
+.register-left h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.login-left p,
+.register-left p {
+  font-size: 1rem;
+  color: #f1f1f1;
+}
+
+/* RIGHT SIDE (form) */
+.login-right,
+.register-right {
+  flex: 1;
+  background-color: #1a1a1a;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* RESPONSIVE STACKING (on small screens) */
+@media (max-width: 768px) {
+  .login-card,
+  .register-card {
+    flex-direction: column;
+    max-width: 95%;
+  }
+  .login-left,
+  .register-left {
+    padding: 1.5rem;
+  }
+}
+
+/* ========== SMALL SCREEN FORM FIXES ========== */
+@media (max-width: 576px) {
+  .row > .col-md-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .form-control {
+    font-size: 0.9rem;
+  }
+
+  .card {
+    padding: 1rem !important;
+  }
+
+  .card form input {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+}
+
+/* ========== LARGE SCREEN POLISH ========== */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1400px;
+  }
 }
