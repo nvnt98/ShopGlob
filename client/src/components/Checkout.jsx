@@ -5,32 +5,47 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Checkout = () => {
-  const { cart, userAddress, decreaseQty, increaseQty, removeFromCart, url, user, clearCart } =
-    useContext(AppContext);
+  const {
+    cart,
+    userAddress,
+    decreaseQty,
+    increaseQty,
+    removeFromCart,
+    url,
+    user,
+    clearCart,
+  } = useContext(AppContext);
 
   const [qty, setQty] = useState(0);
   const [price, setPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     let totalQty = 0;
-    let totalPrice = 0;
+    let totalPriceAcc = 0;
 
-    // This logic is safe because of the "?." check
     if (cart?.items) {
       for (const item of cart.items) {
         if (item) {
           totalQty += item.qty;
-          totalPrice += item.price * item.qty;
+          totalPriceAcc += item.price * item.qty;
         }
       }
     }
     setQty(totalQty);
-    setPrice(totalPrice);
+    setPrice(totalPriceAcc);
   }, [cart]);
 
-
+  useEffect(() => {
+    let total = 0;
+    if (cart?.items) {
+      cart.items.forEach((item) => {
+        total += item.price * item.qty;
+      });
+    }
+    setTotalPrice(total);
+  }, [cart]);
 
   const handlePayment = async () => {
     try {
@@ -39,28 +54,19 @@ const Checkout = () => {
         qty: qty,
         cartItems: cart.items,
         userShipping: userAddress,
-        userId: user._id
+        userId: user._id,
       });
-      // console.log("Order Response:", orderResponse);
+
       const { orderId, amount: orderAmount } = orderResponse.data;
 
       var options = {
-
-        "key": "rzp_test_RJnkRIWWiPQqd1", // Enter the Key ID generated from the Dashboard
-
-        "amount": orderAmount,
-        // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-
-        "currency": "INR",
-
-        "name": "Navneet Kumar Gond",
-
-        "description": "Test Transaction",
-
-        "order_id": orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-
-        "handler": async function (response) {
-
+        key: "rzp_test_RJnkRIWWiPQqd1",
+        amount: orderAmount,
+        currency: "INR",
+        name: "Navneet Kumar Gond",
+        description: "Test Transaction",
+        order_id: orderId,
+        handler: async function (response) {
           const paymentData = {
             orderId: response.razorpay_order_id,
             paymentId: response.razorpay_payment_id,
@@ -68,12 +74,11 @@ const Checkout = () => {
             amount: orderAmount,
             orderItems: cart?.items,
             userId: user._id,
-            userShipping: userAddress
+            userShipping: userAddress,
           };
 
           const api = await axios.post(`${url}/payment/verify-payment`, paymentData);
 
-          // console.log("Razorpay Response:", api.data);
           if (api.data.success) {
             const orderSummary = {
               orderId: response.razorpay_order_id,
@@ -88,192 +93,179 @@ const Checkout = () => {
             clearCart();
             navigate("/orderConfirmation");
           }
-  
-
         },
-
-        "prefill": {
-
-          "name": "Gaurav Kumar",
-
-          "email": "gaurav.kumar@example.com",
-
-          "contact": "9000090000"
-
+        prefill: {
+          name: "Gaurav Kumar",
+          email: "gaurav.kumar@example.com",
+          contact: "9000090000",
         },
-
-        "notes": {
-
-          "address": "Razorpay Corporate Office"
-
-        },
-
-        "theme": {
-
-          "color": "#3399cc"
-
-        }
-
+        notes: { address: "Razorpay Corporate Office" },
+        theme: { color: "#3399cc" },
       };
 
       var rzp = new window.Razorpay(options);
       rzp.open();
-
-
-
-
     } catch (error) {
       console.error("Error during payment initiation:", error);
     }
-  }
-
-
-  // This state now represents the total price of all products
-  const [totalPrice, setTotalPrice] = useState(0);
-  // const navigate = useNavigate();
-
-  // Recalculate the total price whenever the cart items change
-  useEffect(() => {
-    let total = 0;
-    if (cart?.items) {
-      cart.items.forEach((item) => {
-        total += item.price * item.qty;
-      });
-    }
-    setTotalPrice(total);
-  }, [cart]);
+  };
 
   return (
-    <div className="container my-5">
-      <h1 className="text-center mb-4">Order Summary</h1>
+    <div className="container my-5 checkout-page">
+      <div className="checkout-header d-flex justify-content-between align-items-end">
+        <div>
+          <h1 className="mb-0">Checkout</h1>
+          <small className="text-muted">
+            {qty} {qty === 1 ? "item" : "items"} in your order
+          </small>
+        </div>
+        <div className="d-none d-md-inline">
+          <button className="btn btn-outline-warning me-2" onClick={() => navigate("/")}>
+            Continue Shopping
+          </button>
+          <button
+            className="btn btn-outline-danger"
+            onClick={() => {
+              if (window.confirm("Clear entire cart?")) clearCart();
+            }}
+          >
+            Clear Cart
+          </button>
+        </div>
+      </div>
 
       {!cart?.items?.length ? (
-        <div className="text-center">
+        <div className="text-center my-5">
           <h2>Your cart is empty. Please add items to proceed.</h2>
-          <button
-            className="btn btn-warning mt-3"
-            onClick={() => navigate("/")}
-          >
+          <button className="btn btn-warning mt-3" onClick={() => navigate("/")}>
             Continue Shopping
           </button>
         </div>
       ) : (
-        <div className="row">
-          {/* ## Column 1: Item Details with Images */}
-          <div className="col-md-8">
-            <div className="table-responsive">
-              <table className="table table-bordered table-dark table-striped align-middle">
-                <thead>
-                  <tr className="text-center">
-                    <th scope="col">Product</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Remove</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cart.items.map((item) => (
-                    <tr key={item.productId} className="text-center">
-                      <td className="d-flex align-items-center justify-content-start">
-                        <img
-                          src={item.imgSrc}
-                          alt={item.title}
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            borderRadius: "8px",
-                            marginRight: "15px",
-                          }}
-                        />
-                        <span>{item.title}</span>
-                      </td>
-                      <td>₹{item.price}</td>
-                      <td className="text-center">
-                        <button
-                          onClick={() => decreaseQty(item.productId, 1)}
-                          className="btn btn-secondary btn-sm mx-1"
-                        >
-                          -
-                        </button>
-                        <b className="mx-2">{item.qty}</b>
-                        <button
-                          onClick={() => increaseQty(item.productId, 1)}
-                          className="btn btn-secondary btn-sm mx-1"
-                        >
-                          +
-                        </button>
-                      </td>
-                      <td>
-                        <button
-                          onClick={() => {
-                            if (window.confirm("Remove this item?")) {
-                              removeFromCart(item.productId);
-                            }
-                          }}
-                          className="btn btn-danger btn-sm"
-                        >
-                          Remove
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <div className="checkout-grid mt-4">
+          {/* Items list */}
+          <div className="items-card">
+            <h5 className="mb-3">Items</h5>
 
-          {/* ## Column 2: Latest Shipping Address & Price Details */}
-          <div className="col-md-4">
-            <div className="card bg-dark text-light">
-              <div className="card-body">
-                <h5 className="card-title mb-3">Shipping To</h5>
-                {userAddress ? (
-                  <>
-                    <p className="card-text mb-1">
-                      <strong>{userAddress.fullName}</strong>
-                    </p>
-                    <p className="card-text small mb-1">{userAddress.address}</p>
-                    <p className="card-text small mb-1">
-                      {userAddress.city}, {userAddress.pincode}
-                    </p>
-                    <p className="card-text small">{userAddress.country}</p>
-                  </>
-                ) : (
-                  <div className="text-center">
-                    <p>Please add a shipping address.</p>
-                    <button
-                      className="btn btn-warning"
-                      onClick={() => navigate("/shipping")}
-                    >
-                      Add Address
-                    </button>
+            <div className="items-list d-flex flex-column gap-3">
+              {cart.items.map((item) => {
+                const lineTotal = item.price * item.qty;
+                return (
+                  <div key={item.productId} className="checkout-item">
+                    <div className="thumb">
+                      <img
+                        src={item.imgSrc}
+                        alt={item.title}
+                        onError={(e) => {
+                          e.currentTarget.src = "https://via.placeholder.com/80";
+                        }}
+                      />
+                    </div>
+                    <div className="meta flex-grow-1">
+                      <h6 className="mb-1">{item.title}</h6>
+                      <div className="small text-muted">Unit price: ₹{item.price}</div>
+
+                      <div className="d-flex align-items-center justify-content-between mt-2 flex-wrap gap-2">
+                        <div className="d-flex align-items-center gap-2">
+                          <div className="qty-controls">
+                            <button
+                              className="btn btn-circle btn-minus"
+                              aria-label="Decrease quantity"
+                              disabled={item.qty <= 1}
+                              onClick={() => decreaseQty(item.productId, 1)}
+                            >
+                              −
+                            </button>
+                            <span className="qty-badge">{item.qty}</span>
+                            <button
+                              className="btn btn-circle btn-plus"
+                              aria-label="Increase quantity"
+                              onClick={() => increaseQty(item.productId, 1)}
+                            >
+                              +
+                            </button>
+                          </div>
+
+                          <button
+                            className="btn btn-outline-danger btn-sm"
+                            onClick={() => {
+                              if (window.confirm("Remove this item?")) {
+                                removeFromCart(item.productId);
+                              }
+                            }}
+                          >
+                            Remove
+                          </button>
+                        </div>
+
+                        <div className="price-row">
+                          <span className="text-muted small me-2">Total:</span>
+                          <span className="price text-warning">₹{lineTotal}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                )}
-              </div>
-            </div>
-
-            {/* ## Simplified Price Details Section ## */}
-            <div className="card bg-dark text-light mt-4">
-              <div className="card-body">
-                <h5 className="card-title">Price Details</h5>
-                <ul className="list-group list-group-flush">
-                  <li className="list-group-item bg-dark text-warning d-flex justify-content-between">
-                    <strong>Total Amount:</strong>
-                    <strong>₹{totalPrice.toFixed(2)}</strong>
-                  </li>
-                </ul>
-                <div className="d-grid mt-3">
-                  <button
-                    className="btn btn-success"
-                    disabled={!userAddress}
-                    onClick={() => handlePayment()}
-                  >
-                    Proceed to Payment
-                  </button>
-                </div>
-              </div>
+                );
+              })}
             </div>
           </div>
+
+          {/* Right column: Shipping + Summary */}
+          <aside className="checkout-summary">
+            <div className="shipping-card mb-3">
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <h5 className="mb-0">Shipping To</h5>
+                <button
+                  className="btn btn-outline-warning btn-sm"
+                  onClick={() => navigate("/shipping")}
+                >
+                  {userAddress ? "Change" : "Add"}
+                </button>
+              </div>
+
+              {userAddress ? (
+                <>
+                  <div className="fw-semibold">{userAddress.fullName}</div>
+                  <div className="small text-muted mt-1">{userAddress.address}</div>
+                  <div className="small text-muted">
+                    {userAddress.city}, {userAddress.pincode}
+                  </div>
+                  <div className="small text-muted">{userAddress.country}</div>
+                </>
+              ) : (
+                <div className="text-muted small">
+                  No address added yet. Please add your shipping address.
+                </div>
+              )}
+            </div>
+
+            <div className="summary-card">
+              <h5 className="mb-3">Price Details</h5>
+              <div className="d-flex justify-content-between">
+                <span>Items</span>
+                <span>{qty}</span>
+              </div>
+              <div className="d-flex justify-content-between mt-2">
+                <span>Subtotal</span>
+                <span className="text-warning">₹{totalPrice.toFixed(2)}</span>
+              </div>
+
+              <hr className="my-3" />
+
+              <div className="d-grid gap-2">
+                <button
+                  className="btn btn-success"
+                  disabled={!userAddress}
+                  onClick={handlePayment}
+                >
+                  Proceed to Payment
+                </button>
+                <button className="btn btn-outline-warning" onClick={() => navigate("/")}>
+                  Continue Shopping
+                </button>
+              </div>
+            </div>
+          </aside>
         </div>
       )}
     </div>

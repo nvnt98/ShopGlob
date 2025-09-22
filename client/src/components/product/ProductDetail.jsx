@@ -30,17 +30,33 @@ const ProductDetail = () => {
 
   return (
     <>
-      <div className="container text-center my-5 detail-container">
+      <div className="container my-5 detail-container">
         <div className="left">
-          <img src={product?.imgSrc} alt={product?.title || "Image Not Found"} />
+          <div className="image-frame">
+            <img
+              src={product?.imgSrc}
+              alt={product?.title || "Image Not Found"}
+            />
+          </div>
         </div>
-        <div className="right text-start text-md-left">
-          <h1>{product?.title}</h1>
-          <p>{product?.description}</p>
-          <h2 className="text-warning">{product?.price} ₹</h2>
 
-          <div className="my-4 d-flex flex-wrap gap-3">
-            {/* ✅ Buy Now */}
+        <div className="right text-start text-md-left">
+          <div className="d-flex align-items-center gap-2 flex-wrap">
+            <h1 className="mb-1">{product?.title}</h1>
+            {product?.category && (
+              <span className="badge-chip">{product.category}</span>
+            )}
+          </div>
+
+          {product?.description && (
+            <p className="detail-description mt-2 text-justify">
+              {product.description}
+            </p>
+          )}
+
+          <h2 className="price-highlight mt-2">₹{product?.price}</h2>
+
+          <div className="my-4 d-flex flex-wrap gap-3 detail-actions">
             <button
               className="btn btn-danger"
               onClick={() => {
@@ -48,7 +64,7 @@ const ProductDetail = () => {
                   product._id,
                   product.title,
                   product.price,
-                  1,               // Always at least one item!
+                  1,
                   product.imgSrc
                 );
                 navigate("/checkout");
@@ -57,7 +73,6 @@ const ProductDetail = () => {
               Buy Now
             </button>
 
-            {/* ✅ Add To Cart */}
             <button
               className="btn btn-warning"
               onClick={() =>
@@ -65,7 +80,7 @@ const ProductDetail = () => {
                   product._id,
                   product.title,
                   product.price,
-                  1, 
+                  1,
                   product.imgSrc
                 )
               }
@@ -76,7 +91,6 @@ const ProductDetail = () => {
         </div>
       </div>
 
-      {/* ✅ Related Products */}
       <RelatedProduct category={product?.category} />
     </>
   );
