@@ -1,301 +1,226 @@
-/* ========== GLOBAL RESET ========== */
+/* ========== GLOBAL RESET & BACKGROUND ========== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
+html, body {
+  height: 100%;
+}
 body {
-  background-color: #0b0b0b;
-  color: white;
+  background: #0b0b0b !important;
+  color: #e0e0e0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.5;
+}
+a { text-decoration: none; color: inherit; }
+#root { min-height: 100vh; background: #0b0b0b !important; }
+
+/* ========== TEXT STYLES (Improved visibility) ========== */
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff;
+  font-weight: 600;
+}
+p, span, li, td, label {
+  color: #e0e0e0;   /* default brighter text */
+  line-height: 1.6;
+}
+.text-muted {
+  color: #9a9a9a !important; /* muted, but still visible */
+}
+b, strong {
+  color: #ffc107;
+  font-weight: 600;
 }
 
-body::-webkit-scrollbar {
-  display: none;
+/* Auth cards helper text (login/register hints) */
+.auth-card small,
+.auth-card span,
+.helper-text {
+  color: #dddddd !important; 
+  font-size: 0.9rem;
+}
+
+/* Highlight clickable links inside auth */
+.link-highlight {
+  color: #ffc107 !important;
+  font-weight: 600;
+  cursor: pointer;
+}
+.link-highlight:hover { text-decoration: underline; }
+
+/* Section Headings (e.g. Related Products) */
+.related-products-title,
+.section-heading {
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
 /* ========== NAVBAR ========== */
-.nav_bar {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 12px 20px;
-  background: linear-gradient(to right, #3c1053, #ad5389);
+.navbar {
+  background: linear-gradient(90deg, #0b0b0b, #1c1c1c) !important;
+  border-bottom: 1px solid #222;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
-
-.nav_bar h3 {
+.navbar-brand {
   font-weight: bold;
-  color: #fff;
+  color: #ffcc00 !important;
+  font-size: 1.5rem;
+  text-shadow: 0 0 5px rgba(255, 204, 0, 0.4);
 }
-
-/* ========== SEARCH BAR ========== */
-.search_bar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #1a1a1a;
-  border-radius: 30px;
-  padding: 6px 12px;
-  width: 100%;
-  max-width: 380px;
+.navbar-toggler-icon { filter: invert(1); }
+.navbar .btn {
+  font-weight: 600;
+  border-radius: 6px;
+  transition: 0.2s;
 }
-
-.search_bar span {
-  color: #aaa;
-}
-
-.search_bar input {
-  border: none;
-  background-color: transparent;
-  color: #fff;
-  width: 100%;
-  padding: 6px;
-}
-
-.search_bar input::placeholder {
-  color: #aaa;
-}
-
-.search_bar input:focus {
-  outline: none;
-}
-
-/* ========== SUB_BAR (FILTER BAR) ========== */
-.sub_bar {
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
-  background-color: rgba(127, 40, 156, 0.95);
-  padding: 8px 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-  z-index: 100;
-}
-
-.sub_bar .items {
-  flex: 1 1 auto;
-  min-width: 100px;
-  padding: 10px 15px;
-  font-weight: bold;
-  text-align: center;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.sub_bar .items:hover {
-  background-color: black;
-}
-
-/* ========== PRODUCT CARDS ========== */
-.card {
-  background-color: #1a1a1a !important;
-  color: #fff;
-  margin: 10px;
-  border-radius: 12px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.15);
-}
-
-.card img {
-  object-fit: contain;
-  border-radius: 8px;
-}
-
-/* ========== BUTTONS ========== */
-.btn {
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  transition: all 0.25s;
-}
-
-.btn:hover {
+.navbar .btn:hover {
   opacity: 0.9;
   transform: translateY(-1px);
 }
 
-/* ========== PRODUCT DETAIL PAGE ========== */
+/* ========== SEARCH BAR (Centered in Navbar) ========== */
+.search-wrapper { max-width: 600px; }
+.search-box {
+  background: #1e1e1e;
+  border-radius: 30px;
+  padding: 4px 12px;
+  flex: 1; 
+  display: flex;
+  align-items: center;
+  border: 1px solid #333;
+}
+.search-box input {
+  background: transparent;
+  border: none;
+  outline: none;
+  flex: 1; color: #fff;
+  font-size: 0.95rem;
+}
+.search-box input::placeholder { color: #cccccc !important; opacity: 1; }
+.search-box span { color: #aaa; transition: color 0.2s; }
+.search-box:focus-within {
+  border-color: #ffc107;
+  box-shadow: 0 0 6px rgba(255,193,7,0.3);
+}
+.search-box:focus-within span { color: #ffc107; }
+
+/* Responsive NAV tweaks */
+@media(max-width:768px){
+  .navbar { padding:0.3rem 1rem!important; }
+  .navbar-brand { font-size:1.2rem; }
+  .search-wrapper { display:none!important; } /* hide search on mobile */
+  .btn { font-size:0.85rem; padding:6px 10px; }
+}
+@media(max-width:576px){
+  .navbar { padding:0.25rem 0.75rem!important; min-height:56px; }
+  .navbar-brand { font-size:1rem; line-height:1.2; }
+  .navbar-toggler { padding:0.25rem 0.5rem; }
+  .navbar .btn {
+    width:100%;
+    margin:4px 0;
+    font-size:0.8rem;
+    padding:6px 10px;
+  }
+}
+
+/* ========== FILTER SUB_BAR ========== */
+.sub_bar {
+  display:flex; flex-wrap:wrap; justify-content:center;
+  padding:10px; background:#1a1a1a;
+  animation: slideDown 0.3s ease;
+}
+.sub_bar .items {
+  background:#2b2b2b; margin:5px; padding:8px 16px; color:#ddd;
+  border-radius:6px; cursor:pointer; transition:all 0.2s;
+}
+.sub_bar .items:hover { background:#ffc107; color:#000; }
+@keyframes slideDown { from{opacity:0; transform:translateY(-10px);} to{opacity:1; transform:translateY(0);} }
+
+/* ========== PRODUCT CARDS ========== */
+.card {
+  background:#1a1a1a; color:#e0e0e0; border-radius:10px;
+  transition:transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { transform:translateY(-3px); box-shadow:0 6px 16px rgba(255,255,255,0.1); }
+.card h5, .card-title { color:#ffffff !important; }
+.card img { border-radius:8px; object-fit:contain; }
+
+/* ========== PRODUCT DETAIL ========== */
 .detail-container {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 30px;
+  display:flex; justify-content:space-evenly; align-items:center;
+  flex-wrap:wrap; gap:30px; margin-top:30px;
 }
-
 .detail-container img {
-  max-width: 300px;
-  width: 90%;
-  border-radius: 12px;
-  border: 2px solid yellow;
+  max-width:350px; width:100%; height:auto; object-fit:contain;
+  border-radius:12px; border:2px solid #ffc107;
+  background:#111; padding:10px;
 }
+.detail-container h1, 
+.detail-container h2, 
+.detail-container h3 { color:#fff !important; }
+.detail-container p { color:#dcdcdc; }
 
-/* ========== TABLES (Checkout & Cart Responsive) ========== */
-@media (max-width: 768px) {
-  table thead {
-    display: none;
-  }
+@media(max-width:768px){ .detail-container img{ max-width:250px; } }
 
+/* ========== BUTTONS ========== */
+.btn { border-radius:8px!important; font-weight:600!important; transition:all .25s; }
+.btn:hover { opacity:.9; transform:translateY(-2px); }
+
+/* ========== CART & CHECKOUT Responsive ========== */
+@media(max-width:768px){
+  table thead{ display:none; }
   table tbody tr {
-    display: block;
-    margin-bottom: 15px;
-    background: #1a1a1a;
-    border-radius: 8px;
-    padding: 10px;
+    display:block; margin-bottom:15px; background:#1a1a1a;
+    border-radius:8px; padding:10px;
   }
-
   table tbody td {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 10px;
-    font-size: 0.9rem;
+    display:flex; justify-content:space-between; 
+    padding:8px 10px; font-size:0.9rem; color:#e0e0e0;
   }
-
   table tbody td::before {
-    content: attr(data-label);
-    font-weight: bold;
-    text-transform: capitalize;
+    content:attr(data-label);
+    font-weight:bold; text-transform:capitalize; color:#bbb;
   }
 }
 
-/* ========== RESPONSIVE TYPOGRAPHY ========== */
-h1, h2, h3 {
-  font-size: clamp(1.2rem, 2vw, 2.2rem);
+/* ========== AUTH PAGES (Login/Register) ========== */
+.auth-container {
+  min-height:90vh; display:flex; justify-content:center; align-items:center;
+  padding:15px;
+}
+.auth-card {
+  background:#1a1a1a; border-radius:16px; width:100%; max-width:420px;
+  padding:30px; color:#e0e0e0;
+  transition:transform 0.2s, box-shadow 0.2s;
+}
+.auth-card:hover{ transform:translateY(-4px); box-shadow:0 10px 25px rgba(0,0,0,0.6); }
+.auth-card h2{ color:#ffc107; }
+.auth-card p { color:#dddddd !important; } /* brighter tagline */
+.auth-card .form-control {
+  background:#222!important; border:1px solid #333;
+  border-radius:10px; color:#fff!important; padding:12px;
+}
+.auth-card .form-control:focus {
+  border-color:#ffc107!important; box-shadow:0 0 6px rgba(255,193,7,0.6);
 }
 
-p {
-  font-size: clamp(0.9rem, 1vw, 1.1rem);
+/* ========== ORDER CONFIRMATION ========== */
+.confirm-card {
+  background:#1a1a1a; border-radius:15px;
+  padding:20px; box-shadow:0 6px 14px rgba(0,0,0,0.6);
 }
+.confirm-card h5 { margin-bottom:10px; color:#fff; }
+.confirm-card p { color:#dddddd; }
 
-/* ========== FORMS (General Inputs) ========== */
-.card form input {
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 1rem;
+/* ========== TOASTIFY ========== */
+.Toastify__toast{
+  border-radius:8px; font-weight:500; padding:10px 14px;
 }
-
-.card form label {
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.btn {
-  font-size: 1rem;
-  padding: 12px;
-  border-radius: 8px;
-}
-
-/* ========== LOGIN / REGISTER Rectangular Split ========== */
-.login-container,
-.register-container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
-}
-
-.login-card,
-.register-card {
-  background-color: #1a1a1a;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-  width: 100%;
-  max-width: 950px;   /* wide rectangle */
-  min-height: 420px;
-  display: flex;
-  flex-direction: row;
-  overflow: hidden;
-}
-
-/* LEFT SIDE (welcome panel) */
-.login-left,
-.register-left {
-  flex: 1;
-  background: linear-gradient(135deg, #3c1053, #ad5389);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 2rem;
-}
-
-.login-left h2,
-.register-left h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-}
-
-.login-left p,
-.register-left p {
-  font-size: 1rem;
-  color: #f1f1f1;
-}
-
-/* RIGHT SIDE (form) */
-.login-right,
-.register-right {
-  flex: 1;
-  background-color: #1a1a1a;
-  padding: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* RESPONSIVE STACKING (on small screens) */
-@media (max-width: 768px) {
-  .login-card,
-  .register-card {
-    flex-direction: column;
-    max-width: 95%;
-  }
-  .login-left,
-  .register-left {
-    padding: 1.5rem;
-  }
-}
-
-/* ========== SMALL SCREEN FORM FIXES ========== */
-@media (max-width: 576px) {
-  .row > .col-md-4 {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-
-  .form-control {
-    font-size: 0.9rem;
-  }
-
-  .card {
-    padding: 1rem !important;
-  }
-
-  .card form input {
-    font-size: 0.9rem;
-    padding: 10px;
-  }
-
-  .btn {
-    font-size: 0.9rem;
-    padding: 10px;
-  }
-}
-
-/* ========== LARGE SCREEN POLISH ========== */
-@media (min-width: 1200px) {
-  .container {
-    max-width: 1400px;
-  }
-}
+.Toastify__toast--success{ background:#2e7d32; color:#fff;}
+.Toastify__toast--error{ background:#c62828; color:#fff;}
+.Toastify__toast--info{ background:#1565c0; color:#fff;}
+.Toastify__toast--warning{ background:#ef6c00; color:#fff;}

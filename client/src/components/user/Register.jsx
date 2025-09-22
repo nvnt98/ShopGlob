@@ -1,101 +1,87 @@
-import React, { useContext, useState } from "react";
+// src/components/user/Register.jsx
+import React, { useState, useContext } from "react";
 import AppContext from "../../context/AppContext";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const navigate = useNavigate()
+  const { register } = useContext(AppContext);
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
 
-  const {register} = useContext(AppContext)
-  const [formData, setformData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const onChangeHandler = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onChangeHandler = (e) => {
-    const { name, value } = e.target;
-    setformData({ ...formData, [name]: value });
-
-  };
-
-  const {name ,email, password}= formData;
-
-  const submitHandler = async(e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    // alert("Your form has been submitted");
-    const result = await register(name, email, password);
-    // console.log(result);
-
-    if (result.success){
-      navigate("/login")
-    }
-     
-
+    const res = await register(formData.name, formData.email, formData.password);
+    if (res.success) navigate("/login");
   };
 
   return (
-    <>
-      <div
-        className="container my-5 p-4 "
-        style={{
-          width: "600px",
-          border: "2px solid yellow",
-          borderRadius: "10px",
-        }}
-      >
+    <div className="auth-container">
+      <div className="auth-card shadow-lg">
+        <h2 className="text-center mb-3">🙌 Create an Account</h2>
+        <p className="text-center text-muted mb-4">
+          Join <b>ShopGlob</b> and explore amazing deals
+        </p>
 
-
-        <h1 className="text-center">User Register</h1>
-        <form onSubmit={submitHandler} className="my-3">
+        <form onSubmit={submitHandler}>
           <div className="mb-3">
-            <label htmlFor="exampleInputEmail1" className="form-label">
-              Name
-            </label>
+            <label>Name</label>
             <input
+              className="form-control"
               name="name"
               value={formData.name}
               onChange={onChangeHandler}
-              type="text"
-              className="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
+              placeholder="Enter your name"
+              required
             />
           </div>
+
           <div className="mb-3">
-            <label htmlFor="exampleInputEmail1" className="form-label">
-              Email
-            </label>
+            <label>Email</label>
             <input
+              className="form-control"
+              type="email"
               name="email"
               value={formData.email}
               onChange={onChangeHandler}
-              type="email"
-              className="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
+              placeholder="Enter your email"
+              required
             />
           </div>
+
           <div className="mb-3">
-            <label htmlFor="exampleInputPassword1" className="form-label">
-              Password
-            </label>
+            <label>Password</label>
             <input
+              className="form-control"
+              type="password"
               name="password"
               value={formData.password}
               onChange={onChangeHandler}
-              type="password"
-              className="form-control"
-              id="exampleInputPassword1"
+              placeholder="Enter a strong password"
+              required
             />
           </div>
-          <div className="d-grid col-6 mx-auto my-3">
-            <button type="submit" className="btn btn-primary">
-              Register
-            </button>
-          </div>
+
+          <button type="submit" className="btn btn-success w-100 mt-3">
+            Register
+          </button>
         </form>
+
+        <div className="text-center mt-4">
+          <span className="text-muted">
+            Already have an account?{" "}
+            <span
+              onClick={() => navigate("/login")}
+              className="link-highlight"
+            >
+              Login
+            </span>
+          </span>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
