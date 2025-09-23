@@ -6,10 +6,7 @@ import RelatedProduct from "./RelatedProduct";
 import AppContext from "../../context/AppContext";
 
 const ProductDetail = () => {
-  // Use env if available; fallback to localhost for dev
-  const API_URL =
-    (import.meta?.env?.VITE_API_URL && import.meta.env.VITE_API_URL.trim()) ||
-    "http://localhost:3000/api";
+const url = "http://localhost:3000/api";
 
   const [product, setProduct] = useState({});
   const { id } = useParams();
