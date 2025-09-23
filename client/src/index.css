@@ -527,3 +527,120 @@ b,strong { color:#ffc107; font-weight:600; }
   .navbar .nav-link + .nav-link,
   .navbar .link-highlight + .link-highlight { margin-left:0; }
 }
+
+/* ===== Profile Page — Enhanced UI ===== */
+.profile-page { margin-top: 24px; }
+
+.profile-header {
+  background: linear-gradient(135deg, #141414, #1b1b1b);
+  border: 1px solid #222;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+}
+
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #111;
+  border: 2px solid #333;
+  display: grid;
+  place-items: center;
+  color: #ffd54f;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: .5px;
+  user-select: none;
+}
+
+/* Bright greeting and accented name */
+.profile-greeting {
+  margin: 0;
+  color: #ffffff !important;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  line-height: 1.2;
+}
+.profile-name {
+  color: #ffd54f !important;
+  font-weight: 800;
+}
+
+/* Email under greeting */
+.profile-subtitle {
+  color: #d7d7d7 !important;
+  font-size: 0.95rem;
+  margin-top: 2px;
+}
+
+/* Un-mute anything accidentally muted inside header */
+.profile-header .text-muted {
+  color: #f0f0f0 !important;
+  opacity: 1 !important;
+}
+
+/* Grid of sections/cards */
+.profile-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 768px) {
+  .profile-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1200px) {
+  .profile-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.profile-card {
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 14px;
+  padding: 16px;
+}
+.profile-card h6 { color: #fff; margin-bottom: 8px; }
+.profile-card p,
+.profile-card small,
+.profile-card span { color: #e6e6e6; }
+
+.profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+.profile-actions .btn { border-radius: 10px; font-weight: 700; }
+.profile-actions .btn-warning { color:#000; }
+
+/* Fallback if markup can't be changed */
+.profile-header :is(h1,h2,h3) {
+  color: #ffffff !important;
+  font-weight: 800;
+}
+.profile-header :is(h1,h2,h3) :is(span,strong,b) {
+  color: #ffd54f !important;
+}
+
+/* ===== Profile heading brightness fix ===== */
+.profile-page h1,
+.profile-header h1,
+.container.text-center.my-5 > h1 {
+  color: #ffffff !important;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  line-height: 1.2;
+}
+.profile-page h1 :is(span,strong,b),
+.profile-header h1 :is(span,strong,b) {
+  color: #ffd54f !important;
+}
+.profile-header .text-muted,
+.profile-page .text-muted {
+  color: #f0f0f0 !important;
+  opacity: 1 !important;
+}
