@@ -352,36 +352,89 @@ b,strong { color:#ffc107; font-weight:600; }
   .price-highlight { font-size:1.5rem; }
 }
 
-/* ===== Address form — UI-only ===== */
+/* ===== Address form — refined UI ===== */
 .address-card {
   background:#141414;
   border:1px solid #222;
   border-radius:16px;
   box-shadow:0 8px 24px rgba(0,0,0,0.5);
 }
-.address-header h1 { color:#ffe082; }
-.address-header p { color:#ececec !important; font-weight:500; letter-spacing:.2px; }
 
-/* Dark form controls (scoped) */
-.address-card .form-label { color:#eaeaea; font-weight:600; }
+/* Heading + helper */
+.address-header h1 { color:#ffe082; }
+.address-header p { color:#f0f0f0 !important; font-weight:500; letter-spacing:.2px; margin-top:.25rem; }
+
+/* Layout spacing inside form */
+.address-card .row { row-gap: 12px; }
+.address-card .mb-3 { margin-bottom: 1rem !important; }
+
+/* Labels */
+.address-card .form-label {
+  color:#eaeaea;
+  font-weight:600;
+  letter-spacing:.2px;
+  margin-bottom:6px;
+}
+
+/* Inputs/Textareas */
 .address-card .form-control {
-  background:#222 !important;
-  color:#fff !important;
-  border:1px solid #333;
+  background:#1f1f1f !important;
+  color:#ffffff !important;
+  border:1px solid #2d2d2d;
   border-radius:10px;
   padding:12px 12px;
+  transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
 }
+.address-card textarea.form-control { min-height:110px; resize:vertical; }
+
+/* Placeholder tone */
 .address-card .form-control::placeholder { color:#8a8a8a !important; }
-.address-card .form-control:focus { border-color:#ffc107 !important; box-shadow:0 0 6px rgba(255,193,7,0.35); }
 .address-card .form-control:focus::placeholder { color:#777 !important; }
 
-/* Number inputs: hide default spinners for consistent UI */
-.address-card input[type=number]::-webkit-outer-spin-button,
-.address-card input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin:0; }
-.address-card input[type=number] { -moz-appearance: textfield; }
+/* Hover/Focus */
+.address-card .form-control:hover { border-color:#3a3a3a; }
+.address-card .form-control:focus {
+  border-color:#ffc107 !important;
+  box-shadow:0 0 0 3px rgba(255,193,7,0.25);
+  background:#222 !important;
+}
+
+/* Disabled */
+.address-card .form-control:disabled,
+.address-card .form-control[readonly] {
+  background:#1a1a1a !important;
+  color:#bdbdbd !important;
+  border-color:#2a2a2a !important;
+  cursor:not-allowed;
+}
+
+/* Autofill fix (Chrome) */
+.address-card .form-control:-webkit-autofill,
+.address-card .form-control:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #1f1f1f inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color:#fff;
+}
+
+/* Validation states */
+.address-card .form-control.is-invalid,
+.address-card .form-control:focus.is-invalid {
+  border-color:#ef5350 !important;
+  box-shadow:0 0 0 3px rgba(239,83,80,0.25) !important;
+}
+.address-card .form-control.is-valid,
+.address-card .form-control:focus.is-valid {
+  border-color:#66bb6a !important;
+  box-shadow:0 0 0 3px rgba(102,187,106,0.25) !important;
+}
 
 /* Buttons in this card */
-.address-card .btn { border-radius:10px; font-weight:700; }
+.address-card .btn {
+  border-radius:10px;
+  font-weight:700;
+}
+.address-card .btn-primary { box-shadow:0 6px 14px rgba(0,0,0,0.4); }
+.address-card .btn-primary:hover { filter:brightness(1.05); }
 .address-card .btn-warning { color:#000; }
 
 /* ===== Checkout — Enhanced UI (UI-only) ===== */
@@ -457,4 +510,20 @@ b,strong { color:#ffc107; font-weight:600; }
 @media (max-width: 576px) {
   .checkout-item { padding:10px; }
   .checkout-item .thumb { width:70px; height:70px; }
+}
+
+/* ===== Navbar actions spacing (Login / Logout / Explore) ===== */
+.navbar .nav-item + .nav-item,
+.navbar .btn + .btn,
+.navbar .nav-link + .nav-link,
+.navbar .link-highlight + .link-highlight { margin-left:12px; }
+
+/* Optional wrapper for grouped actions */
+.navbar .nav-actions { display:flex; align-items:center; gap:12px; }
+
+@media (max-width: 576px) {
+  .navbar .nav-item + .nav-item,
+  .navbar .btn + .btn,
+  .navbar .nav-link + .nav-link,
+  .navbar .link-highlight + .link-highlight { margin-left:0; }
 }

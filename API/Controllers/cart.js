@@ -1,4 +1,4 @@
-// --API/Controller/cart.js
+// file: API/Controllers/cart.js
 import { Cart } from "../Models/Cart.js";
 
 // Add to cart

@@ -1,3 +1,4 @@
+// File: API/Routes/product.js
 import express from "express";
 import { addProduct, deleteProductById, getAllProducts, getProductById, updateProductById } from "../Controllers/product.js";
 

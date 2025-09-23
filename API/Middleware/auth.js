@@ -1,3 +1,4 @@
+// File: API/Middleware/auth.js
 import jwt from "jsonwebtoken"; 
 import { User } from "../Models/User.js";
 

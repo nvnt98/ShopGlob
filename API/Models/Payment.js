@@ -1,3 +1,4 @@
+// File: API/Models/Payment.js
 import mongoose from "mongoose";
 
 const paymentScema = new mongoose.Schema(

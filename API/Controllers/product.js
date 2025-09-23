@@ -1,4 +1,4 @@
-// api/controllers/product.js
+//file: API/Controllers/product.js
 import { Product } from "../Models/Product.js";
 
 // ==========================

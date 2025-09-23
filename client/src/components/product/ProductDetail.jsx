@@ -6,7 +6,11 @@ import RelatedProduct from "./RelatedProduct";
 import AppContext from "../../context/AppContext";
 
 const ProductDetail = () => {
-  const url = "http://localhost:3000/api";
+  // Use env if available; fallback to localhost for dev
+  const API_URL =
+    (import.meta?.env?.VITE_API_URL && import.meta.env.VITE_API_URL.trim()) ||
+    "http://localhost:3000/api";
+
   const [product, setProduct] = useState({});
   const { id } = useParams();
   const navigate = useNavigate();
@@ -16,17 +20,15 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const api = await axios.get(`${url}/product/${id}`, {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        });
+        // No headers, no withCredentials -> avoids CORS preflight
+        const api = await axios.get(`${API_URL}/product/${id}`);
         setProduct(api.data.product);
       } catch (error) {
         console.error("Error fetching product:", error);
       }
     };
     fetchProduct();
-  }, [id]);
+  }, [id, API_URL]);
 
   return (
     <>

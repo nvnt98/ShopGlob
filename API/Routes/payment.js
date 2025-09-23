@@ -1,3 +1,4 @@
+// File: API/Routes/payment.js
 import express from 'express';
 import { checkout,verifyPayment,userOrder,allOrders } from '../Controllers/payment.js';
 import {Authenticated} from '../Middleware/auth.js';
