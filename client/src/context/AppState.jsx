@@ -4,13 +4,13 @@ import AppContext from "./AppContext";
 import axios from "axios";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 
-const AppState = (props) => {  
-  // 🔑 This is your single API URL — same everywhere
+const AppState = (props) => {
   const url = "https://shopglob.onrender.com/api";
 
   const [products, setProducts] = useState([]);
   const [token, setToken] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);  // 👈 Add this
 
   const [filterData, setFilterData] = useState([]);
   const [user, setUser] = useState(null);
@@ -20,16 +20,24 @@ const AppState = (props) => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const api = await axios.get(`${url}/product/all`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
-      setProducts(api.data.products);
-      setFilterData(api.data.products);
-      userProfile();
-      getAddress();
+      try {
+        setLoading(true);  // 👈 Start loading
+        const api = await axios.get(`${url}/product/all`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
+        setProducts(api.data.products);
+        setFilterData(api.data.products);
+        userProfile();
+        getAddress();
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        toast.error("Failed to load products", { theme: "dark" });
+      } finally {
+        setLoading(false);  // 👈 Stop loading
+      }
     };
     fetchProduct();
     user_Order();
@@ -43,6 +51,8 @@ const AppState = (props) => {
       setIsAuthenticated(true);
     }
   }, []);
+
+  // ... rest of your existing code (register, login, logout, etc.)
 
   // REGISTER USER
   const register = async (name, email, password) => {
@@ -142,7 +152,7 @@ const AppState = (props) => {
     try {
       const api = await axios.delete(`${url}/cart/remove/${productId}`, {
         headers: { Auth: token },
-        data:{productId}
+        data: { productId }
       });
       setCart(api.data.cart);
       toast.success(api.data.message, { theme: "dark", transition: Bounce });
@@ -167,7 +177,7 @@ const AppState = (props) => {
   // ADD SHIPPING ADDRESS
   const shippingAddress = async (fullName, address, city, state, country, pincode, phoneNumber) => {
     try {
-      const api = await axios.post(`${url}/address/add`, 
+      const api = await axios.post(`${url}/address/add`,
         { fullName, address, city, state, country, pincode, phoneNumber },
         { headers: { Auth: token } }
       );
@@ -203,7 +213,7 @@ const AppState = (props) => {
         products,
         register,
         login,
-        url,   // 🔑 expose URL here
+        url,
         isAuthenticated,
         setIsAuthenticated,
         filterData,
@@ -219,6 +229,7 @@ const AppState = (props) => {
         userAddress,
         increaseQty,
         userOrder,
+        loading,  // 👈 Add this
       }}
     >
       {props.children}

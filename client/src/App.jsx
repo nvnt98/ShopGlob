@@ -5,6 +5,7 @@ import ShowProduct from "./components/product/ShowProduct";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ProductDetail from "./components/product/ProductDetail";
 import Navbar from "./components/Navbar";
+import ScrollToTop from "./components/ScrollToTop";  // 👈 Import here
 import SearchProduct from "./components/product/SearchProduct";
 import Register from "./components/user/Register";
 import { ToastContainer, toast } from 'react-toastify';
@@ -21,6 +22,7 @@ import OrderConfirmation from "./components/OrderConfirmation";
 const App = () => {
   return (
     <Router>
+      <ScrollToTop />  {/* 👈 Add this line */}
       <Navbar />
        <ToastContainer />
       <Routes>

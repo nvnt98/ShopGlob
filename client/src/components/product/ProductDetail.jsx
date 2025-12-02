@@ -9,12 +9,14 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // ✅ Grab `url` and `addToCart` from AppContext (AppState)
   const { addToCart, url } = useContext(AppContext);
 
   const [product, setProduct] = useState({});
 
   useEffect(() => {
+    // 👈 Scroll to top when product ID changes
+    window.scrollTo({ top: 0, behavior: "instant" });
+
     const fetchProduct = async () => {
       try {
         const api = await axios.get(`${url}/product/${id}`);

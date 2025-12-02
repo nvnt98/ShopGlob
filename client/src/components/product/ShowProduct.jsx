@@ -2,9 +2,23 @@
 import React, { useContext } from "react";
 import AppContext from "../../context/AppContext";
 import { Link } from "react-router-dom";
+import Loader from "../Loader";  // 👈 Import Loader
 
 const ShowProduct = () => {
-  const { filterData, addToCart } = useContext(AppContext);
+  const { filterData, addToCart,loading } = useContext(AppContext);
+    // 👈 Show loader while loading
+  if (loading) {
+    return <Loader />;
+  }
+
+  // 👈 Show message if no products
+  if (!filterData || filterData.length === 0) {
+    return (
+      <div className="container text-center my-5">
+        <h3 className="text-light">No products found</h3>
+      </div>
+    );
+  }
 
   return (
     <div className="container">
