@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -11,38 +10,18 @@ import paymentRouter from './Routes/payment.js';
 
 const app = express();
 
-// ===========================================
-// MIDDLEWARE
-// ===========================================
-
+// --- Middleware Setup ---
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'https://shop-glob.vercel.app'
-  ],
+  origin: process.env.FRONTEND_URL || true, // safer in production
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
 
 app.use(express.json());
 
-// ===========================================
-// ROUTES
-// ===========================================
-
+// --- Routes ---
 app.get('/', (req, res) => {
-  res.json({ 
-    message: 'ShopGlob API is running',
-    status: 'OK' 
-  });
-});
-
-app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'OK',
-    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
-  });
+  res.send('home route');
 });
 
 app.use('/api/user', userRouter);
@@ -51,46 +30,15 @@ app.use('/api/cart', cartRouter);
 app.use('/api/address', addressRouter);
 app.use('/api/payment', paymentRouter);
 
-// ===========================================
-// 404 HANDLER
-// ===========================================
-
-app.use((req, res) => {
-  res.status(404).json({ 
-    success: false,
-    message: 'Route not found' 
-  });
-});
-
-// ===========================================
-// ERROR HANDLER
-// ===========================================
-
-app.use((err, req, res, next) => {
-  console.error('Error:', err.message);
-  res.status(500).json({ 
-    success: false,
-    message: 'Internal server error' 
-  });
-});
-
-// ===========================================
-// DATABASE CONNECTION
-// ===========================================
-
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ MongoDB connected'))
-  .catch((err) => {
-    console.error('❌ MongoDB connection error:', err.message);
-    process.exit(1);
-  });
-
-// ===========================================
-// START SERVER
-// ===========================================
+// --- Database and Server Start ---
+mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://nvnt_t:shopglob@shopglob.kavjjv0.mongodb.net/', {
+  dbName: 'shopglob',
+})
+.then(() => console.log('✅ DB connected'))
+.catch((err) => console.error('❌ DB connection error:', err));
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-   console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
