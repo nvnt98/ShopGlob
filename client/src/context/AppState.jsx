@@ -5,7 +5,7 @@ import axios from "axios";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 
 const AppState = (props) => {  
-  // 🔑 This is your single API URL — same everywhere
+  // 🔑 API URL
   const url = "https://shopglob.onrender.com/api";
 
   const [products, setProducts] = useState([]);
@@ -18,19 +18,46 @@ const AppState = (props) => {
   const [userAddress, setUserAddress] = useState("");
   const [userOrder, setUserOrder] = useState([]);
 
+  // ✅ NEW: Loading and Error States
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchProduct = async () => {
-      const api = await axios.get(`${url}/product/all`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
-      setProducts(api.data.products);
-      setFilterData(api.data.products);
-      userProfile();
-      getAddress();
+      try {
+        setLoading(true); // ✅ Start loading
+        setError(null);   // ✅ Clear previous errors
+
+        const api = await axios.get(`${url}/product/all`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+          timeout: 60000, // ✅ 60 second timeout
+        });
+
+        setProducts(api.data.products);
+        setFilterData(api.data.products);
+        
+        userProfile();
+        getAddress();
+
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setError(err.response?.data?.message || "Failed to load products. Please try again.");
+        
+        toast.error("Products taking longer than usual. Server might be waking up...", {
+          position: "top-center",
+          autoClose: 5000,
+          theme: "dark",
+          transition: Bounce
+        });
+
+      } finally {
+        setLoading(false); // ✅ Stop loading
+      }
     };
+
     fetchProduct();
     user_Order();
     userCart();
@@ -43,6 +70,30 @@ const AppState = (props) => {
       setIsAuthenticated(true);
     }
   }, []);
+
+  // ✅ NEW: Retry function
+  const retryFetchProducts = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const api = await axios.get(`${url}/product/all`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+        timeout: 60000,
+      });
+      
+      setProducts(api.data.products);
+      setFilterData(api.data.products);
+      toast.success("Products loaded successfully!", { theme: "dark" });
+      
+    } catch (err) {
+      setError("Failed to load products");
+      toast.error("Still having trouble. Please check your connection.", { theme: "dark" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // REGISTER USER
   const register = async (name, email, password) => {
@@ -81,20 +132,28 @@ const AppState = (props) => {
 
   // USER PROFILE
   const userProfile = async () => {
-    const api = await axios.get(`${url}/user/profile`, {
-      headers: { "Content-Type": "application/json", Auth: token },
-      withCredentials: true,
-    });
-    setUser(api.data.user);
+    try {
+      const api = await axios.get(`${url}/user/profile`, {
+        headers: { "Content-Type": "application/json", Auth: token },
+        withCredentials: true,
+      });
+      setUser(api.data.user);
+    } catch (err) {
+      console.error("Error fetching profile:", err);
+    }
   };
 
   // USER CART
   const userCart = async () => {
-    const api = await axios.get(`${url}/cart/user`, {
-      headers: { "Content-Type": "application/json", Auth: token },
-      withCredentials: true,
-    });
-    setCart(api.data.cart);
+    try {
+      const api = await axios.get(`${url}/cart/user`, {
+        headers: { "Content-Type": "application/json", Auth: token },
+        withCredentials: true,
+      });
+      setCart(api.data.cart);
+    } catch (err) {
+      console.error("Error fetching cart:", err);
+    }
   };
 
   // ADD TO CART
@@ -181,20 +240,28 @@ const AppState = (props) => {
 
   // GET ADDRESS
   const getAddress = async () => {
-    const api = await axios.get(`${url}/address/get`, {
-      headers: { "Content-Type": "application/json", Auth: token },
-      withCredentials: true,
-    });
-    setUserAddress(api.data.userAddress);
+    try {
+      const api = await axios.get(`${url}/address/get`, {
+        headers: { "Content-Type": "application/json", Auth: token },
+        withCredentials: true,
+      });
+      setUserAddress(api.data.userAddress);
+    } catch (err) {
+      console.error("Error fetching address:", err);
+    }
   };
 
   // GET USER ORDERS
   const user_Order = async () => {
-    const api = await axios.get(`${url}/payment/userorder`, {
-      headers: { "Content-Type": "application/json", Auth: token },
-      withCredentials: true,
-    });
-    setUserOrder(api.data);
+    try {
+      const api = await axios.get(`${url}/payment/userorder`, {
+        headers: { "Content-Type": "application/json", Auth: token },
+        withCredentials: true,
+      });
+      setUserOrder(api.data);
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+    }
   };
 
   return (
@@ -203,7 +270,7 @@ const AppState = (props) => {
         products,
         register,
         login,
-        url,   // 🔑 expose URL here
+        url,
         isAuthenticated,
         setIsAuthenticated,
         filterData,
@@ -219,6 +286,9 @@ const AppState = (props) => {
         userAddress,
         increaseQty,
         userOrder,
+        loading,           // ✅ NEW
+        error,             // ✅ NEW
+        retryFetchProducts // ✅ NEW
       }}
     >
       {props.children}
