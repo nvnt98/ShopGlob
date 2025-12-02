@@ -3,7 +3,6 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import helmet from 'helmet';
-import mongoSanitize from 'express-mongo-sanitize';
 import rateLimit from 'express-rate-limit';
 
 import userRouter from './Routes/user.js';
@@ -20,7 +19,7 @@ const app = express();
 
 app.use(helmet());
 
-// ✅ CORS Configuration
+// CORS Configuration
 const allowedOrigins = process.env.ALLOWED_ORIGINS 
   ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
   : [
@@ -54,7 +53,7 @@ app.use(cors({
   maxAge: 86400,
 }));
 
-// ✅ Handle preflight requests (Express 5 compatible)
+// Handle preflight requests
 app.use((req, res, next) => {
   if (req.method === 'OPTIONS') {
     res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -76,7 +75,8 @@ const limiter = rateLimit({
 });
 
 app.use('/api', limiter);
-app.use(mongoSanitize());
+
+// Body Parser
 app.use(express.json({ limit: process.env.MAX_FILE_SIZE || '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
